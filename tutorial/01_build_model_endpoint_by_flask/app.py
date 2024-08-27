@@ -47,7 +47,7 @@ def home():
     return render_template_string(toy_html_template)
 
 
-@app.route("/predict", methods=["POST"])
+@app.route("/predict", methods=["POST", "GET"])
 def predict():
     data = request.get_json()
     input_data = data.get("input")
