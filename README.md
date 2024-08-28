@@ -5,7 +5,7 @@ To bridge the gap between model development and real-world application in machin
 
 This article will concentrate on deploying machine learning models as services using Python Flask APIs, while also addressing key challenges and considerations commonly encountered in production environments.
 
-The following issues will be discussed in this article:
+The following topics will be discussed in this article:
 - **How to build a model api by flask:** 
   - Keywords: Flask, Transformers
 - **How to make a model api more robust:**

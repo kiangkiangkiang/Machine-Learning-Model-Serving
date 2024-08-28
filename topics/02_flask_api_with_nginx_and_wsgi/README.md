@@ -1,4 +1,4 @@
-The Flask API, while suitable for many use cases, may exhibit performance bottlenecks under high traffic loads. To address this limitation and construct a more robust web server, we propose incorporating Nginx and WSGI. By positioning Nginx as a reverse proxy in front of our existing application server (model endpoint), we can distribute incoming traffic more efficiently and improve overall system performance.
+The Flask API, while suitable for many use cases, may exhibit performance bottlenecks under high traffic loads. To address this limitation and construct a more robust web server, we propose incorporating **Nginx** and **WSGI**. By positioning Nginx as a reverse proxy in front of our existing application server (model endpoint), we can distribute incoming traffic more efficiently and improve overall system performance.
 
 <p align="center">
     <img src = "./web_flow.png" style="width: 100%; "></img>
@@ -24,7 +24,7 @@ The file is already set at 01_build_model_endpoint_by_flask.
 [uwsgi]
 wsgi-file = app.py   
 callable = app       
-socket = /app/socket/uwsgi.sock   
+socket = :5001  
 processes = 4
 threads = 2
 master = true
@@ -45,33 +45,16 @@ server{
     listen 80;
     location /{
         include uwsgi_params;
-        uwsgi_pass  unix:/app/socket/uwsgi.sock;
+        uwsgi_pass  127.0.0.1:5001;
     }
 }
 ```
 
-For Services with **Load Balance** (`./load_balance_nginx.conf`)
-```
-upstream my_app {
-    server 127.0.0.1:5001;
-    server 127.0.0.1:5002;
-    server 127.0.0.1:5003;
-}
-server{
-    listen 80;
-    location /{
-        include uwsgi_params;
-        uwsgi_pass  unix:/app/socket/uwsgi.sock;
-    }
-}
-```
-
-We've configured Nginx to serve as a reverse proxy on this machine, listening on port `80`. Requests to the root path `/` are forwarded to the backend application server via the `uwsgi.sock` socket. By using Nginx as a reverse proxy, we can hide the backend server's IP address and distribute incoming traffic more efficiently.
+We've configured Nginx to serve as a reverse proxy on this machine, listening on port `80`. Requests to the root path `/` are forwarded to the backend application server via the socket. By using Nginx as a reverse proxy, we can hide the backend server's IP address and distribute incoming traffic more efficiently.
 
 #### Activate Config
 
 ```bash
-# Replace toy_nginx.conf into load_balance_nginx.conf if you want to make your service have load balancer
 cp toy_nginx.conf /etc/nginx/sites-available/ 
 rm /etc/nginx/sites-enabled/default
 ln -s /etc/nginx/sites-available/toy_nginx.conf /etc/nginx/sites-enabled/ 
@@ -105,11 +88,24 @@ or
 
 Open the browser and search http://localhost/
 
+### Log
+
+Success Log for nginx
+```bash
+tail -f /var/log/nginx/access.log
+```
+
+Error Log for nginx
+```bash
+tail -f /var/log/nginx/error.log
+```
+
 ### Error
 
-1. bind(): No such file or directory [core/socket.c line 230]
+- bind(): No such file or directory [core/socket.c line 230]
    - Sol: `mkdir /app/socket`
-
+- uwsgi curl: (52) Empty reply from server
+  - Sol: It means you are going to use uWSGI without a web server (nginx), so change `socket = :5001` into `http = :5001`.
 
 ### Reference:
 1. [WSGI Basic Concept](https://minglunwu.com/notes/2021/flask_plus_wsgi.html/)

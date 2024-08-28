@@ -1,0 +1,8 @@
+services:
+    model_endpoint1:
+        image: nvidia/cuda:12.4.1-devel-ubuntu22.04
+        command: bash -c "
+                    apt-get update 
+                    && python manage.py runserver 0.0.0.0:8000
+                "
+    

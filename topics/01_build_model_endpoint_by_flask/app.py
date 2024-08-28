@@ -1,7 +1,12 @@
+import os
+
 from flask import Flask, jsonify, render_template_string, request
 from toy_model import model
 
+PORT = os.getenv("FLASK_PORT", 5001)
+
 app = Flask(__name__)
+
 
 toy_html_template = """
 <!DOCTYPE html>
@@ -56,4 +61,4 @@ def predict():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5001, debug=True)
+    app.run(host="0.0.0.0", port=PORT, debug=True)
