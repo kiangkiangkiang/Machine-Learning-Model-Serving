@@ -10,13 +10,27 @@ The following topics will be discussed in this article:
   - Keywords: Flask, Transformers
 - **How to make a model api more robust:**
   - Keywords: WSGI, Nginx, load balance
-- **How to painlessly migrate and scale a service by packaging it as a microservice:**
-  - Keywords: Docker
-- **How to monitor**
-- **How to build a machine learning CI/CD pipeline**
-  - Keywords: CI/CD, DevOps, Training Pipeline & Deploy
+- **How to build a complete service system:**
+  - Keywords: Docker, docker-compose
+- **How to monitor systems and models:**
+- **How to build a machine learning CI/CD pipeline:**
+  - Keywords: CI/CD, MLOps, Training Pipeline & Deploy
 
-python==3.10
+## System Setup 
+
+Our system is configured to the following specifications:
+
+- **python 3.10**
+- **ubuntu 22.04**
+- **docker-compose 2.29.2**
+
+For the `docker-compose` package. It can be installed by the following command:
+```bash
+sudo curl -L "https://github.com/docker/compose/releases/download/v2.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+```
+
+Use `docker-compose --version` to check your version:
 
 
 # uwsgi 安裝錯誤解

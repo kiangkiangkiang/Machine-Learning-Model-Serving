@@ -3,7 +3,7 @@ import os
 from flask import Flask, jsonify, render_template_string, request
 from toy_model import model
 
-PORT = os.getenv("FLASK_PORT", 5001)
+PORT = os.getenv("PORT", 5001)
 
 app = Flask(__name__)
 

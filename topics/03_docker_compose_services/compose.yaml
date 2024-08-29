@@ -1,8 +1,16 @@
+version: '0.2'
 services:
+    my_load_balance:
+        build: nginx
+        ports:
+            - "80:80"
+        depends_on:
+            - model_endpoint1
+            - model_endpoint2
     model_endpoint1:
-        image: nvidia/cuda:12.4.1-devel-ubuntu22.04
-        command: bash -c "
-                    apt-get update 
-                    && python manage.py runserver 0.0.0.0:8000
-                "
-    
+        build: ../01_build_model_endpoint_by_flask
+    model_endpoint2:
+        build: ../01_build_model_endpoint_by_flask
+networks:
+  my_network:
+    driver: bridge
