@@ -29,7 +29,7 @@ curl -X POST -H "Content-Type: application/json" -d '{"key":"value", "input": "Y
 The following is the final outcome of our implementation. It constitutes a rudimentary service operating on the local host. Moving forward, you can collaborate with a frontend developer to establish a local server on a single machine. The frontend developer will then be able to activate your model through the execution of scripts.
 
 <p align="center">
-    <img src = "./result.png" style="width: 70%; "></img>
+    <img src = "../../docs/result.png" style="width: 70%; "></img>
 
 </p>
 
