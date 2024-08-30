@@ -46,3 +46,4 @@ python:3.10.14-bookworm
 ## Reference
 - [mlflow document](https://mlflow.org/docs/latest/index.html)
 - [mlflow docker setup](https://github.com/PenHsuanWang/mlflow-docker-setup)
+- [MLflow with remote Tracking Server, backend and artifact stores](https://medium.com/lionswerk/mlflow-with-remote-tracking-server-backend-and-artifact-stores-39912680a464)

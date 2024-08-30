@@ -1,0 +1,25 @@
+version: '0.1'
+services:
+    artifact-server:
+        image: python:3.10.14
+        expose:
+            - "5002"
+        command: >
+            /bin/sh -c "
+                pip install mlflow && 
+                mlflow server --host 0.0.0.0 --port 5002 --serve-artifacts --artifacts-destination ./my_mlartifacts_data --gunicorn-opts '--log-level debug'
+                "
+    tracking-server:
+        image: python:3.10.14
+        expose:
+            - "5001"
+        ports:
+            - "5001:5001"
+        command: >
+            /bin/sh -c "
+                pip install mlflow && 
+                mlflow server --host 0.0.0.0 --port 5001 --gunicorn-opts '--log-level debug' --artifacts-destination http://artifact-server:5002/api/2.0/mlflow-artifacts/artifacts/experiments
+                "
+networks:
+    my_mlflow_network:
+        driver: bridge
