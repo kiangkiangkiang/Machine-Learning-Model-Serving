@@ -29,14 +29,17 @@ See command the details: https://mlflow.org/docs/latest/cli.html
 
 Through the tours of `03_docker_compose_services`, we know how to construct services by `docker-compose`. Thus, instead of building all components in the same container (simply demo), we are going to use `docker-compose` to build the `mlflow` architecture above.
 
-TODO
 ```
-docker-compose here
+docker-compose up --build
 ```
 
 ## Services Quick Tour
 
 ### Experiments
+
+```python
+
+```
 
 ### Serving
 
