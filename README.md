@@ -3,18 +3,20 @@
 
 To bridge the gap between model development and real-world application in machine learning, it's crucial to consider effective deployment strategies.
 
-This article will concentrate on deploying machine learning models as services using Python Flask APIs, while also addressing key challenges and considerations commonly encountered in production environments.
+This article will concentrate on deploying machine learning models as services using **Python Flask APIs**, while also addressing key challenges and considerations commonly encountered in production environments.
 
 The following topics will be discussed in this article:
 - **How to build a model api by flask:** 
-  - Keywords: Flask, Transformers
 - **How to make a model api more robust:**
-  - Keywords: WSGI, Nginx, load balance
-- **How to build a complete service system:**
-  - Keywords: Docker, docker-compose
+- **How to organize into microservices:**
 - **How to monitor systems and models:**
 - **How to build a machine learning CI/CD pipeline:**
-  - Keywords: CI/CD, MLOps, Training Pipeline & Deploy
+
+Through a tour of 5 topics, we will build a service for an **MLOps** architecture, as shown below:
+
+<p align="center">
+    <img src = "./docs/mlops-arch.png" style="width: 100%; "></img>
+</p>
 
 ## System Setup 
 
