@@ -19,11 +19,28 @@ rf = RandomForestRegressor(n_estimators=100, max_depth=6, max_features=3)
 rf.fit(X_train, y_train)
 
 # Use the model to make predictions on the test dataset.
-predictions = rf.predict(X_test)
+# predictions = rf.predict(X_test)
 
+
+from mlflow.tracking import MlflowClient
+
+client = MlflowClient("http://localhost:5001")
+model_name = "MyFirstModel"
+
+# Register the model
 mlflow.sklearn.log_model(
     sk_model=rf,
     artifact_path="sklearn-model",
-    signature=infer_signature(X_test, predictions),
-    registered_model_name="my first model",
+    registered_model_name=model_name,
 )
+
+version = client.search_model_versions(f"name='{model_name}'")[0].version
+client.set_registered_model_alias(model_name, "Staging", version)
+
+
+# breakpoint()
+
+# from mlflow.tracking import MlflowClient
+my_model = mlflow.pyfunc.load_model(model_uri=f"models:/{model_name}@Staging")
+predictions = rf.predict(X_test)
+print(123)
