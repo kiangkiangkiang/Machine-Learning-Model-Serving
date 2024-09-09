@@ -1,0 +1,37 @@
+version: '0.1'
+services:
+    backend-store:
+        image: postgres
+        expose:
+            - "5432"
+        environment:
+            - TZ=UTC
+            - POSTGRES_DB=my_mlflowruns
+            - POSTGRES_USER=mlops
+            - POSTGRES_PASSWORD=mlops
+    artifact-server:
+        image: python:3.10.14
+        expose:
+            - "5002"
+        command: >
+            /bin/sh -c "
+                pip install mlflow && 
+                mlflow server --host 0.0.0.0 --port 5002 --serve-artifacts --artifacts-destination ./my_mlartifacts_data --gunicorn-opts '--log-level debug'
+                "
+    tracking-server:
+        image: python:3.10.14
+        expose:
+            - "5001"
+        ports:
+            - "5001:5001"
+        command: >
+            /bin/sh -c "
+                pip install mlflow psycopg2 && 
+                mlflow server --host 0.0.0.0 --port 5001 --gunicorn-opts '--log-level debug' --artifacts-destination http://artifact-server:5002/api/2.0/mlflow-artifacts/artifacts/experiments --backend-store-uri postgresql+psycopg2://mlflow:mlflow@backend-store:5432/my_mlflowruns
+                "
+        depends_on:
+            backend-store:
+                condition: service_started
+networks:
+    mlops_network:
+        driver: bridge
