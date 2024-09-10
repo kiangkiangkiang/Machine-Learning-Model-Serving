@@ -10,6 +10,11 @@ def train_model():
     requests.get("http://training_endpoint:9999/train")
 
 
+def switch_model():
+    requests.get("http://model_endpoint1:9998/change_model")
+    requests.get("http://model_endpoint2:9998/change_model")
+
+
 default_args = {"start_date": datetime.now()}
 
 with DAG(
@@ -19,4 +24,7 @@ with DAG(
 ) as dag:
     Training_Data_Update = DummyOperator(task_id="Training_Data_Update")
     Train_Model = PythonOperator(task_id="Train_Model", python_callable=train_model)
-    Training_Data_Update >> Train_Model
+    Switch_Latest_Model = PythonOperator(
+        task_id="Switch_Latest_Model", python_callable=train_model
+    )
+    Training_Data_Update >> Train_Model >> Switch_Latest_Model

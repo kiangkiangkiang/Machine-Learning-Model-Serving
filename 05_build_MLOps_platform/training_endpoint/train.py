@@ -1,4 +1,5 @@
 import functools
+import gc
 import logging
 import os
 
@@ -162,5 +163,8 @@ def pipeline():
         f"eval_loss: {results.state.log_history[0]['eval_loss']}, eval_accuracy: {results.state.log_history[0]['eval_accuracy']}",
         SLACK_URL,
     )
+
+    del model, tokenizer, dataset
+    gc.collect()
 
     return "Success"

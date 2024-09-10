@@ -1,0 +1,27 @@
+version: '0.2'
+services:
+    my_load_balance:
+        build: nginx
+        ports:
+            - "80:80"
+        depends_on:
+            - model_endpoint1
+            - model_endpoint2
+        networks:
+            - 04_model_tracking_and_monitoring_default
+    model_endpoint1:
+        build: .
+        expose:
+            - 9998
+        networks:
+            - 04_model_tracking_and_monitoring_default
+    model_endpoint2:
+        build: .
+        expose:
+            - 9998
+        networks:
+            - 04_model_tracking_and_monitoring_default
+networks:
+  04_model_tracking_and_monitoring_default:
+    external:
+      true
