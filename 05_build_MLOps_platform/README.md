@@ -74,8 +74,11 @@ docker-compose -f ./training_endpoint/docker-compose.yaml up
 
 To recap, our service aims to automatically trigger the training process when new data is added and seamlessly switch to the latest version of the model as a service. 
 
-**Thus, this phase primarily involves setting up our training database and writing the Trigger into the internal database.** When the **Trigger** is activated, we plan to invoke the **Airflow** service to manage the entire workflow (Training -> Model Version Switch).
+**Thus, this phase primarily involves setting up our training database and writing the Trigger into the internal database.** When the **Trigger** is activated, we plan to invoke the **Airflow** service to manage the entire workflow (Data Update -> Training -> Model Version Switch).
+
+For more details, please refer to the `./db` folder.
 
 ## 4. Model Endpoint
 
 ## 5. Airflow
+

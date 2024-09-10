@@ -1,11 +1,15 @@
 services:
-    db:
+    training-database:
         image: postgres
         environment:
             POSTGRES_USER: mlops
             POSTGRES_PASSWORD: mlops
             POSTGRES_DB: imdb_db
-        ports:
-            - 5432:5432
-        
+        expose:
+            - 5432
+        networks:
+            - 04_model_tracking_and_monitoring_default
+networks:
+    04_model_tracking_and_monitoring_default:
+        external: true
     

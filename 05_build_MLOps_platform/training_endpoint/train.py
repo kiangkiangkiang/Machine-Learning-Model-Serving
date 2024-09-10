@@ -8,7 +8,7 @@ import pandas as pd
 from datasets import Dataset, DatasetDict, load_dataset
 from huggingface_hub import login
 from model import *
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, inspect
 
 dotenv.load_dotenv()
 mlflow.set_tracking_uri(
@@ -17,10 +17,9 @@ mlflow.set_tracking_uri(
 logging.basicConfig(level=logging.INFO)
 SAMPLE_MODEL_NAME = "my_first_serving_model"
 SLACK_URL = os.environ.get("SLACK_URL", None)
-login(token=os.environ.get("HUGGINGFACE_TOKEN"))
 db_engine = create_engine(
-    "postgresql+psycopg2://mlops:mlops@db:5432/imdb_db"
-)  # Use docker network to connect db. Or you can use ip as well.
+    "postgresql+psycopg2://mlops:mlops@training-database:5432/imdb_db"
+)  # Use docker network to connect training-database. Or you can use ip as well.
 
 
 def load_model():
@@ -38,15 +37,29 @@ def load_data():
         df = pd.DataFrame(dataset[split])
         df.to_sql(table_name, db_engine, index=False, if_exists="replace")
 
-    if False:
-        # 連資料庫
-        pass
+    def fetch_from_db(table_name):
+        query = f"SELECT * FROM {table_name}"
+        df = pd.read_sql(query, db_engine)
+        return df
+
+    all_tables = inspect(db_engine).get_table_names()
+
+    if "imdb_train" in all_tables and "imdb_test" in all_tables:
+        logging.info("Found data in database. Fetching the data...")
+        train = Dataset.from_pandas(fetch_from_db("imdb_train"))
+        test = Dataset.from_pandas(fetch_from_db("imdb_test"))
+        return DatasetDict(
+            {
+                "train": train,
+                "test": test,
+            }
+        )
     else:
+        logging.info("Data not found in database. Initialize a new dataset...")
         dataset = load_dataset("imdb")
         save_to_db(dataset, "train", "imdb_train")
         save_to_db(dataset, "test", "imdb_test")
-
-        return
+        return dataset
 
 
 def send_msg(payload, slack_webhook_url):
@@ -116,13 +129,15 @@ def registry_model(client, results):
 
 
 def pipeline():
+    # Huggingface Setup
+    login(token=os.environ.get("HUGGINGFACE_TOKEN"))
+
     # MLflow Setup
     client = mlflow.tracking.MlflowClient()
     exp_name = "transformer-exp"
     if not mlflow.search_experiments(filter_string=f"name='{exp_name}'"):
         mlflow.create_experiment(name=exp_name)
     mlflow.set_experiment(experiment_name=exp_name)
-    mlflow.autolog()
 
     # Training Pipeline
     logging.info("Load Model...")
@@ -135,11 +150,12 @@ def pipeline():
     dataset = dataset.map(fun, batched=True)
 
     logging.info("Start Training...")
-    results = do_train(model, tokenizer, dataset)
+    with mlflow.start_run():
+        results = do_train(model, tokenizer, dataset)
 
-    # Register model
-    logging.info("Register Model...")
-    registry_model(client, results)
+        # Register model
+        logging.info("Register Model...")
+        registry_model(client, results)
 
     # Send Message
     send_msg(

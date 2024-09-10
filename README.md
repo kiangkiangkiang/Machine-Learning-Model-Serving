@@ -1,6 +1,5 @@
 # Machine-Learning-Model-Serving
 
-
 To bridge the gap between model development and real-world application in machine learning, it's crucial to consider effective deployment strategies.
 
 This article will concentrate on deploying machine learning models as services using **Python Flask APIs**, while also addressing key challenges and considerations commonly encountered in production environments.
@@ -12,7 +11,7 @@ The following topics will be discussed in this article:
 - **How to use mlflow monitor and control model version:**
 - **How to automate ML pipeline with Airflow:**
 
-Through a tour of 5 topics, we will build a service for an **MLOps** architecture, as shown below:
+Through a tour of **5 topics**, we will build a service for an **MLOps** architecture, as shown below:
 
 <p align="center">
     <img src = "./docs/mlops-arch.png" style="width: 100%; "></img>
@@ -34,7 +33,20 @@ sudo chmod +x /usr/local/bin/docker-compose
 
 Use `docker-compose --version` to check your version:
 
+The services we will be using next will mostly run in a **Docker** environment, so you can refer to the settings in the `Dockerfile` or `docker-compose.yaml` for most of the services.
 
-# uwsgi 安裝錯誤解
-conda install uwsgi
+## Services Integration
+
+### MLflow
+
+**MLflow** is one of the most important services for tracking models, experiments, and more during the training process. 
+
+Therefore, during the learning process, we will manually set up the **MLflow** service, as well as create a **custom backend database** and **model storage**. The schematic diagram is as follows:
+
+<p align="center">
+    <img src = "./docs/mlflow-server.png" style="width: 100%; "></img>
+</p>
+
+### Airflow
+
 
