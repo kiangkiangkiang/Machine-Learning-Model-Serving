@@ -57,16 +57,24 @@ def home():
 
 @app.route("/change_model", methods=["POST", "GET"])
 def load_latest_model():
+    status = _do_load()
+    return jsonify({"Status": status})
+
+
+def _do_load():
     global model
     try:
         model_uri = f"models:/{SAMPLE_MODEL_NAME}@Champion"
         model = mlflow.transformers.load_model(model_uri)
+        logging.info("Change Model Success!")
+        return "Success"
     except Exception as e:
         logging.info(e)
-        model = lambda _: [{"result": "not found"}]
+        model = lambda _: [{"label": "model not found", "score": -1}]
+        return "Failed"
 
 
-load_latest_model()
+_ = _do_load()
 
 
 @app.route("/predict", methods=["POST", "GET"])
@@ -74,7 +82,9 @@ def predict():
     data = request.get_json()
     input_data = data.get("input")
     prediction = model(input_data)
-    result = {"prediction": prediction}
+    result = {
+        "prediction": f"label: {prediction[0]['label']}, score: {prediction[0]['score']}"
+    }
     return jsonify(result)
 
 

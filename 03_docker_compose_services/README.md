@@ -8,6 +8,19 @@ In the context of machine learning, we need to **distribute the computational wo
 
 Nginx is employed as a **load balancer** to direct traffic to these machines. Each node in our setup comprises an Nginx container and an application server container (hosting the model endpoint), and the entire network is orchestrated using **Docker Compose**.
 
+## Docker Compose
+
+We are going to use the `docker-compose` package. It can be installed by the following command:
+```bash
+sudo curl -L "https://github.com/docker/compose/releases/download/v2.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+```
+
+Use `docker-compose --version` to check your version:
+
+The services we will be using next will mostly run in a **Docker** environment, so you can refer to the settings in the `Dockerfile` or `docker-compose.yaml` for most of the services.
+
+
 ## System Architecture
 
 We simply implemented the above system architecture by the following **docker-compose** file:

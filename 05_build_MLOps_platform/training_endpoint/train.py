@@ -164,7 +164,7 @@ def pipeline():
         SLACK_URL,
     )
 
-    del model, tokenizer, dataset
+    del model, tokenizer, dataset, results
     gc.collect()
 
     return "Success"

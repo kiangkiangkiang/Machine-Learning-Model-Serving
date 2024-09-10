@@ -1,6 +1,6 @@
 import pandas as pd
 from datasets import load_dataset
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, inspect
 
 # 加載 HuggingFace IMDB 資料集
 dataset = load_dataset("imdb")

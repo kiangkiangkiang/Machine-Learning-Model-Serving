@@ -34,8 +34,13 @@ Through the tours of `03_docker_compose_services`, we know how to construct serv
 ```
 docker-compose up --build
 ```
+Finally, you can see the **MLflow** Server that we have set up as follows. Of course, since no experiments have been conducted yet, there will be no data displayed. You can quickly create a toy experiment through the [Quicktour](#quicktour).
 
-# Quick Tour
+<p align="center">
+    <img src = "../docs/mlflow-server.png" style="width: 100%; "></img>
+</p>
+
+# Quicktour
 
 ## Experiments Record
 
