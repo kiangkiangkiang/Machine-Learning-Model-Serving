@@ -37,7 +37,7 @@ def load_model_and_tokenizer(model_name="distilbert/distilbert-base-uncased"):
 def do_train(model, tokenizer, dataset):
     data_collator = DataCollatorWithPadding(tokenizer=tokenizer)
     training_args = TrainingArguments(
-        output_dir="my_awesome_model",
+        output_dir="tmp_ignore",
         learning_rate=2e-5,
         per_device_train_batch_size=16,
         per_device_eval_batch_size=16,

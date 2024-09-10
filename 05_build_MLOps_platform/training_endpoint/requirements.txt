@@ -4,3 +4,9 @@ evaluate
 torch
 torchvision
 accelerate
+python-dotenv
+flask
+uwsgi
+mlflow
+psycopg2
+pandas

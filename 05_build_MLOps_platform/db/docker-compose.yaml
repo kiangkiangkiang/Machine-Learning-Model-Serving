@@ -1,0 +1,11 @@
+services:
+    db:
+        image: postgres
+        environment:
+            POSTGRES_USER: mlops
+            POSTGRES_PASSWORD: mlops
+            POSTGRES_DB: imdb_db
+        ports:
+            - 5432:5432
+        
+    

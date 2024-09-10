@@ -1,0 +1,18 @@
+version: '3'
+services:
+    training_endpoint:
+        build: . 
+        ports:
+            - 9999:9999
+        expose:
+            - 9999
+        networks:
+            - 04_model_tracking_and_monitoring_default
+        deploy:
+            resources:
+                reservations:
+                    devices:
+                        - capabilities: [gpu]
+networks:
+    04_model_tracking_and_monitoring_default:
+        external: true

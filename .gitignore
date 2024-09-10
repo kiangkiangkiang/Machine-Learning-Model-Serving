@@ -4,3 +4,4 @@ __pycache__
 ignore*
 venv
 others/*
+tmp_ignore
