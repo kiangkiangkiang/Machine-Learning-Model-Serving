@@ -3,22 +3,30 @@ CREATE EXTENSION IF NOT EXISTS plpython3u;
 -- Function to send HTTP request to Airflow, and return TRIGGER type
 CREATE OR REPLACE FUNCTION trigger_airflow_dag()
 RETURNS TRIGGER AS $$
-import requests
+import http.client
+import json
 import base64
 
-# Airflow webserver URL 和 DAG ID
-airflow_url = "http://webserver:8080/api/v1/dags/machine-learning-training-pipeline/dagRuns"
+host = "webserver"
+port = 8080
+path = "/api/v1/dags/machine-learning-training-pipeline/dagRuns"
 username = "admin"
 password = "admin"
 auth_string = f"{username}:{password}"
-encoded_auth = base64.b64encode(auth_string.encode()).decode()
+base64_auth_string = base64.b64encode(auth_string.encode()).decode()
 
 headers = {
+    "Cache-Control": "no-cache",
     "Content-Type": "application/json",
-    "Authorization": f"Basic {encoded_auth}"
+    "Authorization": f"Basic {base64_auth_string}",
 }
 
-response = requests.post(airflow_url, headers=headers)
+data = json.dumps({"conf": {}})
+
+conn = http.client.HTTPConnection(host, port)
+conn.request("POST", path, body=data, headers=headers)
+response = conn.getresponse()
+
 if response.status_code != 200:
     raise Exception("Failed to trigger DAG: " + response.text)
 
@@ -27,6 +35,3 @@ return "NEW"
 $$ LANGUAGE plpython3u;
 
 -- Trigger for INSERT and UPDATE
-CREATE TRIGGER imdb_train_notify
-AFTER INSERT OR UPDATE ON imdb_train
-FOR EACH ROW EXECUTE FUNCTION trigger_airflow_dag();

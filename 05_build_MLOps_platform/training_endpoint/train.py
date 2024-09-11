@@ -19,7 +19,9 @@ logging.basicConfig(level=logging.INFO)
 SAMPLE_MODEL_NAME = "my_first_serving_model"
 SLACK_URL = os.environ.get("SLACK_URL", None)
 db_engine = create_engine(
-    "postgresql+psycopg2://mlops:mlops@training-database:5432/imdb_db"
+    "postgresql+psycopg2://mlops:mlops@training-database:5432/imdb_db",
+    pool_pre_ping=True,
+    pool_timeout=30,
 )  # Use docker network to connect training-database. Or you can use ip as well.
 
 
@@ -33,10 +35,23 @@ def load_model():
         return model, tokenizer
 
 
+def create_trigger():
+    with db_engine.connect() as conn:
+        conn.execute(
+            f"""
+            CREATE TRIGGER imdb_train_notify
+            AFTER INSERT OR UPDATE ON imdb_train
+            FOR EACH ROW EXECUTE PROCEDURE trigger_airflow_dag();
+        """
+        )
+
+
 def load_data():
-    def save_to_db(dataset, split, table_name):
+    def initialize_db(dataset, split, table_name):
         df = pd.DataFrame(dataset[split])
         df.to_sql(table_name, db_engine, index=False, if_exists="replace")
+        if split == "train":
+            create_trigger()
 
     def fetch_from_db(table_name):
         query = f"SELECT * FROM {table_name}"
@@ -58,8 +73,8 @@ def load_data():
     else:
         logging.info("Data not found in database. Initialize a new dataset...")
         dataset = load_dataset("imdb")
-        save_to_db(dataset, "train", "imdb_train")
-        save_to_db(dataset, "test", "imdb_test")
+        initialize_db(dataset, "train", "imdb_train")
+        initialize_db(dataset, "test", "imdb_test")
         return dataset
 
 

@@ -10,11 +10,11 @@ services:
         ports: 
             - 2345:5432
         networks:
-            - 04_model_tracking_and_monitoring_default
+            - mlops_network
         volumes:
-            - ./build_trigger.sql:/docker-entrypoint-initdb.d/init.sql
+            - ./init.sql:/docker-entrypoint-initdb.d/init.sql
 
 networks:
-    04_model_tracking_and_monitoring_default:
+    mlops_network:
         external: true
     

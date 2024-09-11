@@ -1,24 +1,27 @@
-# Machine-Learning-Model-Serving
+# Full-Stack Automated Machine Learning Pipeline
 
-To bridge the gap between model development and application in machine learning, it's crucial to consider effective deployment strategies.
-
-This article will concentrate on deploying machine learning models as services using **Flask API, Nginx, WSGI**, while also addressing key challenges and considerations commonly encountered in production environments.
-
-Through a tour of **5 topics**, we will build a service for a toy **MLOps architecture**, as shown below:
+This article will concentrate on deploying machine learning models as services using **Flask API, Nginx, WSGI, MLflow, Airflow**, to build a ML pipeline such as the following architecture. While also addressing key challenges and considerations commonly encountered in production environments.
 
 <p align="center">
     <img src = "./docs/mlops-arch.png" style="width: 100%; "></img>
 </p>
 
 
+Through the introduction in the following chapters, we will build a simple yet practical ML Pipeline. It will achieve among other common ML-related services:
+- **Automatic Model Iteration/Development**
+- **Automated Model Training**
+- **Experiment Monitoring**
+- **Traffic Control**
+- **Workflow and Trigger Management**
 
-## Services Integration
+## Serving Model Endpoints
 
-### Flask API & Nginx & WSGI
+## Scaling with Load Balancer
 
+## Model and Experiment Monitoring
 
+## Model and Experiment Monitoring
 
-### MLflow
 
 **MLflow** is one of the most important services for tracking models, experiments, and more during the training process. 
 

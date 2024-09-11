@@ -8,7 +8,7 @@ services:
     ports:
       - "5432:5432"
     networks:
-      - 04_model_tracking_and_monitoring_default
+      - mlops_network
   airflow-init:
     image: apache/airflow:2.3.0
     depends_on:
@@ -18,9 +18,10 @@ services:
       - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@airflow-postgres/airflow
     command: 
       bash -c "airflow db init
-      && airflow db upgrade"   
+      && airflow db upgrade
+      && sleep 10"   
     networks:
-      - 04_model_tracking_and_monitoring_default
+      - mlops_network
   create-admin:
     image: apache/airflow:2.3.0
     depends_on:
@@ -40,7 +41,7 @@ services:
           --role Admin \
           --email admin@example.com
     networks:
-      - 04_model_tracking_and_monitoring_default
+      - mlops_network
   webserver:
     image: apache/airflow:2.3.0
     environment:
@@ -53,8 +54,9 @@ services:
     command: webserver
     volumes:
       - ./dags:/opt/airflow/dags
+      - ./airflow.cfg:/opt/airflow/airflow.cfg
     networks:
-      - 04_model_tracking_and_monitoring_default
+      - mlops_network
   scheduler:
     image: apache/airflow:2.3.0
     environment:
@@ -66,7 +68,7 @@ services:
     volumes:
       - ./dags:/opt/airflow/dags
     networks:
-      - 04_model_tracking_and_monitoring_default
+      - mlops_network
 networks:
-  04_model_tracking_and_monitoring_default:
+  mlops_network:
     external: true

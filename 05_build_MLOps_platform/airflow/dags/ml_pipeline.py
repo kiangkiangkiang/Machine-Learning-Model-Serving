@@ -7,12 +7,12 @@ from airflow.operators.python_operator import PythonOperator
 
 
 def train_model():
-    requests.get("http://training_endpoint:9999/train")
+    requests.get("http://training-endpoint:9999/train")
 
 
 def switch_model():
-    requests.get("http://model_endpoint1:9998/change_model")
-    requests.get("http://model_endpoint2:9998/change_model")
+    requests.get("http://model-endpoint1:9998/change_model")
+    requests.get("http://model-endpoint2:9998/change_model")
 
 
 default_args = {"start_date": datetime.now()}

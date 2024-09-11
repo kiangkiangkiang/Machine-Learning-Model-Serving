@@ -1,0 +1,27 @@
+version: '0.2'
+services:
+    my-load-balance:
+        build: nginx
+        ports:
+            - "80:80"
+        depends_on:
+            - model-endpoint1
+            - model-endpoint2
+        networks:
+            - mlops_network
+    model-endpoint1:
+        build: .
+        expose:
+            - 9998
+        networks:
+            - mlops_network
+    model-endpoint2:
+        build: .
+        expose:
+            - 9998
+        networks:
+            - mlops_network
+networks:
+  mlops_network:
+    external:
+      true
