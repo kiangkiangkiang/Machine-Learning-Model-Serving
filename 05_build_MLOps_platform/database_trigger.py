@@ -1,10 +1,9 @@
 import os
 
 from datasets import load_dataset
-from sqlalchemy import Column, Integer, MetaData, Table, Text, create_engine
+from sqlalchemy import MetaData, Table, create_engine
 from sqlalchemy.orm import sessionmaker
 
-# 从环境变量中获取数据库连接信息
 db_engine = create_engine("postgresql+psycopg2://mlops:mlops@localhost:2345/imdb_db")
 
 metadata = MetaData(bind=db_engine)

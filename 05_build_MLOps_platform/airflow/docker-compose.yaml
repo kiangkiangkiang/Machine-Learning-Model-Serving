@@ -8,7 +8,7 @@ services:
     ports:
       - "5432:5432"
     networks:
-      - mlops_network
+      - mlflow_server_default
   airflow-init:
     image: apache/airflow:2.3.0
     depends_on:
@@ -21,7 +21,7 @@ services:
       && airflow db upgrade
       && sleep 10"   
     networks:
-      - mlops_network
+      - mlflow_server_default
   create-admin:
     image: apache/airflow:2.3.0
     depends_on:
@@ -41,9 +41,10 @@ services:
           --role Admin \
           --email admin@example.com
     networks:
-      - mlops_network
+      - mlflow_server_default
   webserver:
     image: apache/airflow:2.3.0
+    tty: true
     environment:
       - AIRFLOW__CORE__EXECUTOR=LocalExecutor                          # 使用本地執行器
       - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@airflow-postgres/airflow     # Airflow 連接 PostgreSQL 的 URL
@@ -56,7 +57,7 @@ services:
       - ./dags:/opt/airflow/dags
       - ./airflow.cfg:/opt/airflow/airflow.cfg
     networks:
-      - mlops_network
+      - mlflow_server_default
   scheduler:
     image: apache/airflow:2.3.0
     environment:
@@ -68,7 +69,7 @@ services:
     volumes:
       - ./dags:/opt/airflow/dags
     networks:
-      - mlops_network
+      - mlflow_server_default
 networks:
-  mlops_network:
+  mlflow_server_default:
     external: true

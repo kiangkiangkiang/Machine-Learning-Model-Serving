@@ -20,6 +20,7 @@ services:
                 "
     tracking-server:
         image: python:3.10.14
+        tty: true
         expose:
             - "5001"
         ports:
@@ -27,7 +28,7 @@ services:
         command: >
             /bin/sh -c "
                 pip install mlflow psycopg2 && 
-                mlflow server --host 0.0.0.0 --port 5001 --gunicorn-opts '--log-level debug' --artifacts-destination http://artifact-server:5002/api/2.0/mlflow-artifacts/artifacts/experiments --backend-store-uri postgresql+psycopg2://mlflow:mlflow@backend-store:5432/my_mlflowruns
+                mlflow server --host 0.0.0.0 --port 5001 --gunicorn-opts '--log-level debug' --artifacts-destination http://artifact-server:5002/api/2.0/mlflow-artifacts/artifacts/experiments --backend-store-uri postgresql+psycopg2://mlops:mlops@backend-store:5432/my_mlflowruns
                 "
         depends_on:
             backend-store:

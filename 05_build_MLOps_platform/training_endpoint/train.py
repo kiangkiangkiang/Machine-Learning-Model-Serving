@@ -9,7 +9,7 @@ import pandas as pd
 from datasets import Dataset, DatasetDict, load_dataset
 from huggingface_hub import login
 from model import *
-from sqlalchemy import create_engine, inspect
+from sqlalchemy import create_engine, inspect, text
 
 dotenv.load_dotenv()
 mlflow.set_tracking_uri(
@@ -38,11 +38,13 @@ def load_model():
 def create_trigger():
     with db_engine.connect() as conn:
         conn.execute(
-            f"""
+            text(
+                """
             CREATE TRIGGER imdb_train_notify
             AFTER INSERT OR UPDATE ON imdb_train
             FOR EACH ROW EXECUTE PROCEDURE trigger_airflow_dag();
         """
+            )
         )
 
 

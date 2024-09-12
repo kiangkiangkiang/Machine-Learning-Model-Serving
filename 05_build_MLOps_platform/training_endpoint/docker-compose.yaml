@@ -7,12 +7,12 @@ services:
         expose:
             - 9999
         networks:
-            - mlops_network
+            - mlflow_server_default
         deploy:
             resources:
                 reservations:
                     devices:
                         - capabilities: [gpu]
 networks:
-    mlops_network:
+    mlflow_server_default:
         external: true

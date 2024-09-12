@@ -6,25 +6,17 @@ We will later add the **model training pipeline as an endpoint** for automating 
     <img src = "../docs/mlops-arch.png" style="width: 100%; "></img>
 </p>
 
-# Quickstart 
-
-TODO
-
-# Component Overview
+Hereafter, I will explain how to compose the aforementioned ML framework using five main components.
 
 ## 1. MLflow Server
 
-In the first step, we will set up an MLflow Server as the foundation for storing the models for the entire model serving process.
+In the first step, we will set up an **MLflow** Server as the foundation for storing the models for the entire model serving process.
 
-Similar to `04_model_tracking_and_monitoring`, we will use a comparable `docker-compose` configuration to set up the **MLflow** service, but we will make changes to the networking part:
+Similar to `04_model_tracking_and_monitoring`, we will use a comparable `docker-compose` configuration to set up the **MLflow** service.
 
-```yaml
-networks:
-    mlops_network:
-        driver: bridge
-```
+It is worth mentioning that this is the first service we establish; therefore, to ensure smooth communication with subsequent services, the network settings of other services will be configured to match this service.
 
-By setting up a common network `mlops_network`, all subsequent services will be able to communicate effectively.
+By default, `docker-compose` uses the name `{PRJT_NAME}_default` for the default network, but in this instance, it will be `mlflow_server_default`.
 
 ## 2. Training Endpoint
 
@@ -43,7 +35,9 @@ The main settings include the message link for **training results (optional)** a
 
 ### Training Pipeline
 
-This example primarily demonstrates how to train a **text classification model**. You can find the complete training pipeline in `./training_endpoint/train.py`, while `./training_endpoint/model.py` contains the relevant training configurations from the **Huggingface** documentation [here](https://huggingface.co/docs/transformers/tasks/sequence_classification).
+This example primarily demonstrates how to train a **text classification model** with **huggingface framework**. However, under the current topic, we will not delve deeply into model training but will instead focus more on service establishment.
+
+You can find the complete training pipeline in `./training_endpoint/train.py`, while `./training_endpoint/model.py` contains the relevant training configurations from the **Huggingface** documentation [here](https://huggingface.co/docs/transformers/tasks/sequence_classification).
 
 It is worth mentioning that we have built this training pipeline into an **API** and deployed the service using `docker-compose`. The specially configured **docker-compose.yaml** file is as follows:
 
@@ -59,22 +53,16 @@ deploy:
 
 To enable **NVIDIA** support, the following configuration is needed in the **docker-compose.yaml** file to declare **hardware devices** and configure the **network** to the same area as **MLflow**. This way, effective communication with the **MLflow** server can be established.
 
-### Launch Training Endpoint Server
-
-Finally, after all configurations are set, you can complete the corresponding service setup using the `docker-compose` command.
-
-```bash
-docker-compose -f ./training_endpoint/docker-compose.yaml build
-docker-compose -f ./training_endpoint/docker-compose.yaml up
-```
-
-**Note: this command is limited to building the training endpoint and does not encompass the full MLOps service. For a complete MLOps service, please see [here](#quickstart).**
-
 ## 3. Training Database
 
 To recap, our service aims to automatically trigger the training process when new data is added and seamlessly switch to the latest version of the model as a service. 
 
-**Thus, this phase primarily involves setting up our training database and writing the Trigger into the internal database.** When the **Trigger** is activated, we plan to invoke the **Airflow** service to manage the entire workflow (Data Update -> Training -> Model Version Switch).
+**Thus, this phase primarily involves setting up our training database and writing the Trigger into the internal database.** When the **Trigger** is activated, we plan to invoke the **Airflow** service to manage the entire workflow, which is look like:
+
+<p align="center">
+    <img src = "../docs/airflow-workflow.png" style="width: 70%; "></img>
+</p>
+
 
 For more details, please refer to the `./db` folder.
 
@@ -82,3 +70,7 @@ For more details, please refer to the `./db` folder.
 
 ## 5. Airflow
 
+
+# Quickstart 
+
+TODO

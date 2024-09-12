@@ -10,11 +10,11 @@ services:
         ports: 
             - 2345:5432
         networks:
-            - mlops_network
+            - mlflow_server_default
         volumes:
             - ./init.sql:/docker-entrypoint-initdb.d/init.sql
 
 networks:
-    mlops_network:
+    mlflow_server_default:
         external: true
     
