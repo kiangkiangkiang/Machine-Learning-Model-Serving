@@ -34,4 +34,4 @@ The following is the final outcome of our implementation. It constitutes a rudim
 </p>
 
 
-btw: `uwsgi.ini` will be introduced at `02_load_balancer_for_model_endpoint/`
+Note: `uwsgi.ini` will be introduced at `02_load_balancer_for_model_endpoint/`

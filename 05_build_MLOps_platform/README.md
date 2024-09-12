@@ -3,7 +3,7 @@ Finally, we will use the previously mentioned **Nginx** and model endpoint as th
 We will later add the **model training pipeline as an endpoint** for automating the training process. Additionally, we will manage the workflows of each node through **Airflow**, forming a complete automated platform for MLOps as shown below:
 
 <p align="center">
-    <img src = "../docs/mlops-arch.png" style="width: 100%; "></img>
+    <img src = "../docs/mlops-arch.png" style="width: 80%; "></img>
 </p>
 
 Hereafter, I will explain how to compose the aforementioned ML framework using five main components.
@@ -100,7 +100,7 @@ By using `alias=Champion`, we can switch to the best experimental model each tim
 Finally, we will set up an **Airflow** platform to manage the entire workflow. Use `http://localhost:8080`, and enter the username and password as `admin` and `admin`, then you will see the **Airflow** platform as shown below. as shown below:
 
 <p align="center">
-    <img src = "../docs/airflow-platform.png" style="width: 100%; "></img>
+    <img src = "../docs/airflow-platform.png" style="width: 80%; "></img>
 </p>
 
 Note that you need to enable the `machine-learning-training-pipeline` DAG in order for the entire workflow to run properly. This workflow can refer to `./airflow/dags/ml_pipeline.py`. Its main function is to interact with the Flask API we have set up.
