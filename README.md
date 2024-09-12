@@ -1,4 +1,4 @@
-# Full-Stack Automated Machine Learning Model Serving
+# Full-Stack Machine Learning Model Serving
 
 In this article, we aim to discuss how to build a comprehensive **local model services**. Unlike previously using AWS services at **[AWS-Sagemaker-Face-Detection-Example](https://github.com/kiangkiangkiang/AWS-Sagemaker-Face-Detection-Example)**, here we manually set up the complete service using **Docker**.
 
